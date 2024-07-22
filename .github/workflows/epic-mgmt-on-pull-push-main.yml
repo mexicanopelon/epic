@@ -2,8 +2,6 @@ on:
   push:
     branches: 
       - main
-    paths: 
-      - mgmt/**
   pull_request:
     branches:
       - main
