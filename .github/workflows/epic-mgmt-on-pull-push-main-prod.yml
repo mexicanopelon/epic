@@ -1,7 +1,7 @@
 on:
-  push:
-    branches: 
-      - main
+  # push:
+  #   branches: 
+  #     - main
   #   paths: 
   #     - mgmt/**
   pull_request:
@@ -9,6 +9,7 @@ on:
       - main
     paths: 
       - mgmt/**
+  workflow_dispatch:
       
 name: Epic Mgmt On Pull or Push To Main Branch, Deploy to Prod
 
