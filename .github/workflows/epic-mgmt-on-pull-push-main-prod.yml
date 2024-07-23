@@ -24,7 +24,6 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       TF_VERSION: ">=0.12"
       TF_ENV: prod
-      TF_WORKSPACE: "epic-mgmt-${{ env.TF_ENV }}"
     outputs:
       tfplanSHA: ${{ github.sha }}
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
@@ -36,6 +35,10 @@ jobs:
         working-directory: ./mgmt
         
     steps:
+        # Set TF_WORKSPACE Environment Variable
+      - name: Set TF_WORKSPACE Environment Variable
+        run: echo "TF_WORKSPACE=epic-mgmt-${{ env.TF_ENV }}" >> $GITHUB_ENV
+        
         # Checkout the repository to the GitHub Actions runner
       - name: Checkout
         uses: actions/checkout@v4
@@ -141,7 +144,6 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       TF_VERSION: ">=0.12"
       TF_ENV: prod
-      TF_WORKSPACE: "epic-mgmt-${{ env.TF_ENV }}"
 
     # Set working directory to ./mgmt
     defaults:
@@ -150,6 +152,10 @@ jobs:
         working-directory: ./mgmt
 
     steps:
+        # Set TF_WORKSPACE Environment Variable
+      - name: Set TF_WORKSPACE Environment Variable
+        run: echo "TF_WORKSPACE=epic-mgmt-${{ env.TF_ENV }}" >> $GITHUB_ENV
+        
         # Checkout the repository to the GitHub Actions runner
       - name: Checkout
         uses: actions/checkout@v4
