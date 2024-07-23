@@ -69,11 +69,16 @@ jobs:
             exit 0
           fi
 
+      - name: List Dirs
+        run: |
+          ls
+          ls ../mgmt
+
       - name: Publish Terraform Plan Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.sha }}.tfplan
-          path: ${{ github.sha }}.tfplan
+          name: ${{ github.sha }}-tfplan
+          path: mgmt/${{ github.sha }}.tfplan
           if-no-files-found: error
 
         # Create string output of Terraform Plan
