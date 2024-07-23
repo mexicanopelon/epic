@@ -20,6 +20,7 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       TF_VERSION: ">=0.12"
       TF_WORKSPACE: "epic-mgmt-${{ vars.ENV }}"
+      TF_VAR_resource_group_name: ${{ vars.RESOURCE_GROUP_NAME }}
       TF_VAR_resource_group_location: ${{ vars.RESOURCE_GROUP_LOCATION }}
       TF_VAR_department: ${{ vars.DEPARTMENT }}
       TF_VAR_project: ${{ vars.PROJECT }}
@@ -143,6 +144,7 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       TF_VERSION: ">=0.12"
       TF_WORKSPACE: "epic-mgmt-${{ vars.ENV }}"
+      TF_VAR_resource_group_name: ${{ vars.RESOURCE_GROUP_NAME }}
       TF_VAR_resource_group_location: ${{ vars.RESOURCE_GROUP_LOCATION }}
       TF_VAR_department: ${{ vars.DEPARTMENT }}
       TF_VAR_project: ${{ vars.PROJECT }}
