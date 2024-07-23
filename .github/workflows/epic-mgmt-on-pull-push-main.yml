@@ -138,7 +138,7 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       TF_VERSION: ">=0.12"
-      TF_WORKSPACE: epic-mgmt
+      TF_WORKSPACE: epic-mgmt-prod
 
     # Set working directory to ./mgmt
     defaults:
