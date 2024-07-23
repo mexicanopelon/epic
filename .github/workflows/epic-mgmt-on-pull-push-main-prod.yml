@@ -16,6 +16,7 @@ jobs:
   tf_plan:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
+    environment: prod_tf_plan
     env:
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
