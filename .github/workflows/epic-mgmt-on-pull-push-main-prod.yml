@@ -23,8 +23,8 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       TF_VERSION: ">=0.12"
-      TF_WORKSPACE: "epic-mgmt-${{ env.TF_ENV }}"
       TF_ENV: prod
+      TF_WORKSPACE: "epic-mgmt-${{ env.TF_ENV }}"
     outputs:
       tfplanSHA: ${{ github.sha }}
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
