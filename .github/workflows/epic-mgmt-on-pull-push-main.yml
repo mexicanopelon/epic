@@ -237,7 +237,7 @@ jobs:
         with:
           name: ${{ needs.tf_plan.outputs.tfplanSHA }}-tfplan
   
-         # Terraform Apply
+         # Terraform Apply Prod
       - name: Terraform Apply
         id: apply
         if: github.ref == 'refs/heads/main' && needs.tf_plan.outputs.tfplanExitCode == 2
