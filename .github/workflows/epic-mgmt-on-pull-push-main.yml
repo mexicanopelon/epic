@@ -119,7 +119,7 @@ jobs:
   
       - name: Terraform Apply
         id: apply
-        if: github.ref == 'refs/heads/main' && process.outputs.tfplanExitCode == 2
+        if: github.ref == 'refs/heads/main' && outputs.tfplanExitCode == 2
         run: |
           terraform apply -auto-approve -input=false ${{ github.sha }}.tfplan
 
