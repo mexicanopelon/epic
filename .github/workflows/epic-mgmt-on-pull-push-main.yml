@@ -71,7 +71,7 @@ jobs:
 
       - name: List Dirs
         run: |
-          ls
+          ls ../
           ls ../mgmt
 
       - name: Publish Terraform Plan Artifact
