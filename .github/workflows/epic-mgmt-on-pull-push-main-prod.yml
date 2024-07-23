@@ -23,7 +23,7 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       TF_VERSION: ">=0.12"
-      TF_ENV: prod
+      TF_VAR_env: prod
     outputs:
       tfplanSHA: ${{ github.sha }}
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
@@ -48,7 +48,7 @@ jobs:
 
         # Set TF_WORKSPACE Environment Variable
       - name: Set TF_WORKSPACE Environment Variable
-        run: echo "TF_WORKSPACE=epic-mgmt-${{ env.TF_ENV }}" >> $GITHUB_ENV
+        run: echo "TF_WORKSPACE=epic-mgmt-${{ env.TF_VAR_env }}" >> $GITHUB_ENV
 
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
@@ -72,7 +72,7 @@ jobs:
         id: tf-plan
         run: |
           export exitcode=0
-          terraform plan -detailed-exitcode -no-color -var-file ${{ env.TF_ENV }}.tfvars -out ${{ github.sha }}.tfplan || export exitcode=$?
+          terraform plan -detailed-exitcode -no-color -var-file ${{ env.TF_VAR_env }}.tfvars -out ${{ github.sha }}.tfplan || export exitcode=$?
   
           echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         
