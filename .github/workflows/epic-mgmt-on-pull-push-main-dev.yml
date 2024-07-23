@@ -94,7 +94,7 @@ jobs:
           path: mgmt/${{ github.sha }}.tfplan
           if-no-files-found: error
 
-        # Create string output of Terraform Plan
+        # Create string output of Terraform  Plan
       - name: Create String Output
         id: tf-plan-string
         run: |
