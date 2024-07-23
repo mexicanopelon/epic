@@ -1,28 +1,36 @@
 on:
-  # push:
-  #   branches: 
-  #     - main
-  #   paths: 
-  #     - mgmt/**
+  push:
+    branches: 
+      - main
+    #paths: 
+    #  - mgmt/**
   pull_request:
     branches:
       - main
     paths: 
       - mgmt/**
       
-name: Epic Mgmt On Pull or Push To Main Branch
+name: Epic Mgmt On Pull or Push To Main Branch, Deploy to Dev
 
 jobs:
   tf_plan:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
+    environment: dev
     env:
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       TF_VERSION: ">=0.12"
-      TF_WORKSPACE: epic-mgmt
+      TF_WORKSPACE: epic-mgmt-${{ vars.ENV }}
+      TF_VAR_resource_group_location: ${{ vars.RESOURCE_GROUP_LOCATION }}
+      TF_VAR_department: ${{ vars.DEPARTMENT }}
+      TF_VAR_project: ${{ vars.PROJECT }}
+      TF_VAR_owner: ${{ vars.OWNER }}
+      TF_VAR_username: ${{ vars.USERNAME }}
+      TF_VAR_release: ${{ vars.RELEASE }}
+      TF_VAR_env: ${{ vars.ENV }}
     outputs:
       tfplanSHA: ${{ github.sha }}
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
@@ -138,7 +146,14 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       TF_VERSION: ">=0.12"
-      TF_WORKSPACE: epic-mgmt
+      TF_WORKSPACE: epic-mgmt-${{ vars.ENV }}
+      TF_VAR_resource_group_location: ${{ vars.RESOURCE_GROUP_LOCATION }}
+      TF_VAR_department: ${{ vars.DEPARTMENT }}
+      TF_VAR_project: ${{ vars.PROJECT }}
+      TF_VAR_owner: ${{ vars.OWNER }}
+      TF_VAR_username: ${{ vars.USERNAME }}
+      TF_VAR_release: ${{ vars.RELEASE }}
+      TF_VAR_env: ${{ vars.ENV }}
 
     # Set working directory to ./mgmt
     defaults:
