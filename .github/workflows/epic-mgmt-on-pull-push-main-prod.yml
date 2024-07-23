@@ -31,6 +31,9 @@ jobs:
       TF_VAR_username: ${{ vars.USERNAME }}
       TF_VAR_release: ${{ vars.RELEASE }}
       TF_VAR_env: ${{ vars.ENV }}
+    outputs:
+      tfplanSHA: ${{ github.sha }}
+      tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
     
     # Set working directory to ./mgmt
     defaults:
