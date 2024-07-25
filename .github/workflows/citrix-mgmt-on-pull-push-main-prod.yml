@@ -2,7 +2,8 @@ on:
   push:
     branches: 
       - main
-    paths: 
+    paths:
+      - .github/workflows/citrix-mgmt-on-pull-push-main-prod.yml 
       - citrix/**
   # pull_request:
   #   branches:

@@ -3,6 +3,7 @@ on:
     branches:
       - '!main'
     paths: 
+      - .github/workflows/epic-mgmt-on-pull-push-main-dev.yml
       - mgmt/**
   workflow_dispatch:
       

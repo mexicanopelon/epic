@@ -3,6 +3,7 @@ on:
     branches:
       - '!main'
     paths: 
+      - .github/workflows/citrix-mgmt-on-pull-push-main-dev.yml
       - citrix/**
   workflow_dispatch:
       

@@ -3,6 +3,7 @@ on:
     branches: 
       - main
     paths: 
+      - .github/workflows/epic-mgmt-on-pull-push-main-prod.yml
       - mgmt/**
   # pull_request:
   #   branches:
