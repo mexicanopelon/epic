@@ -1,9 +1,9 @@
 on:
-  # push:
-  #   branches:
-  #     - '!main'
-  #   paths: 
-  #     - mgmt/**
+  push:
+    branches:
+      - '!main'
+    paths: 
+      - mgmt/**
   workflow_dispatch:
       
 name: Epic Mgmt On Pull or Push To Main Branch, Deploy to Dev
