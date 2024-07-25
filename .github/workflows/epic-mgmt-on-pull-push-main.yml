@@ -1,37 +1,32 @@
 on:
-  # push:
-  #   branches: 
-  #     - main
-  #   paths: 
-  #     - mgmt/**
-  pull_request:
+  push:
     branches:
-      - main
+      - 'main'
     paths: 
-      - mgmt/**
+      - epic-mgmt/**
       
-name: Epic Mgmt On Pull or Push To Main Branch
+name: On Push To Main Branch, Deploy to Epic Mgmt
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  TF_WORKSPACE: epic-mgmt
 
 jobs:
   tf_plan:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
-    env:
-      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-      TF_VERSION: ">=0.12"
-      TF_WORKSPACE: epic-mgmt
     outputs:
       tfplanSHA: ${{ github.sha }}
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
     
-    # Set working directory to ./mgmt
+    # Set working directory
     defaults:
       run:
         shell: bash
-        working-directory: ./mgmt
+        working-directory: ./${{ env.TF_WORKSPACE }}
         
     steps:
         # Checkout the repository to the GitHub Actions runner
@@ -40,10 +35,13 @@ jobs:
 
         # Install the latest version of the Terraform CLI
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: ${{ env.TF_VERSION }}
           terraform_wrapper: false
+
+        # Set TF_WORKSPACE Environment Variable
+      - name: Set TF_WORKSPACE Environment Variable
+        run: echo "TF_WORKSPACE=${{ env.TF_WORKSPACE }}" >> $GITHUB_ENV
 
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
@@ -67,7 +65,7 @@ jobs:
         id: tf-plan
         run: |
           export exitcode=0
-          terraform plan -detailed-exitcode -no-color -out ${{ github.sha }}.tfplan || export exitcode=$?
+          terraform plan -detailed-exitcode -no-color -var-file ${{ env.TF_WORKSPACE }}.tfvars -out ${{ github.sha }}.tfplan || export exitcode=$?
   
           echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         
@@ -83,10 +81,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.sha }}-tfplan
-          path: mgmt/${{ github.sha }}.tfplan
+          path: ${{ env.TF_WORKSPACE }}/${{ github.sha }}.tfplan
           if-no-files-found: error
 
-        # Create string output of Terraform Plan
+        # Create string output of Terraform  Plan
       - name: Create String Output
         id: tf-plan-string
         run: |
@@ -128,23 +126,16 @@ jobs:
                 })
 
   tf_apply_dev:
-    name: 'Terraform Apply on Dev Environment'
+    name: 'Terraform Apply'
     runs-on: ubuntu-latest
-    environment: dev
+    environment: epic-mgmt
     needs: tf_plan
-    env:
-      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-      TF_VERSION: ">=0.12"
-      TF_WORKSPACE: epic-mgmt
 
-    # Set working directory to ./mgmt
+    # Set working directory
     defaults:
       run:
         shell: bash
-        working-directory: ./mgmt
+        working-directory: ./${{ env.TF_WORKSPACE }}
 
     steps:
         # Checkout the repository to the GitHub Actions runner
@@ -153,9 +144,13 @@ jobs:
 
         # Install the latest version of the Terraform CLI
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
+
+        # Set TF_WORKSPACE Environment Variable
+      - name: Set TF_WORKSPACE Environment Variable
+        run: echo "TF_WORKSPACE=${{ env.TF_WORKSPACE }}" >> $GITHUB_ENV
 
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
@@ -176,68 +171,6 @@ jobs:
           name: ${{ needs.tf_plan.outputs.tfplanSHA }}-tfplan
   
         # Terraform Apply
-      - name: Terraform Apply
-        id: apply
-        if: github.ref == 'refs/heads/main' && needs.tf_plan.outputs.tfplanExitCode == 2
-        run: |
-          terraform apply -auto-approve -input=false ../${{ needs.tf_plan.outputs.tfplanSHA }}.tfplan
-
-  tf_apply_prod:
-    name: 'Terraform Apply on Prod Environment'
-    runs-on: ubuntu-latest
-    environment: prod
-    needs: tf_plan
-    env:
-      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-      TF_VERSION: ">=0.12"
-      TF_WORKSPACE: epic-mgmt-prod
-      TF_VAR_resource_group_location: ${{ vars.RESOURCE_GROUP_LOCATION }}
-      TF_VAR_department: ${{ vars.DEPARTMENT }}
-      TF_VAR_project: ${{ vars.PROJECT }}
-      TF_VAR_owner: ${{ vars.OWNER }}
-      TF_VAR_username: ${{ vars.USERNAME }}
-      TF_VAR_release: ${{ vars.RELEASE }}
-      TF_VAR_env: ${{ vars.ENV }}
-
-    # Set working directory to ./mgmt
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./mgmt
-
-    steps:
-        # Checkout the repository to the GitHub Actions runner
-      - name: Checkout
-        uses: actions/checkout@v4
-
-        # Install the latest version of the Terraform CLI
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: ${{ env.TF_VERSION }}
-
-        # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-      - name: Terraform Init
-        id: init
-        run: terraform init
-
-        # List the Terraform workspaces to verify the correct one is selected.
-      - name: Terraform List Workspace
-        id: workspace-list
-        run: terraform workspace list
-          
-        # Download saved plan from artifacts
-      - name: Download Terraform Plan Artifact
-        id: download
-        uses: actions/download-artifact@v4
-        if: github.ref == 'refs/heads/main'
-        with:
-          name: ${{ needs.tf_plan.outputs.tfplanSHA }}-tfplan
-  
-         # Terraform Apply Prod
       - name: Terraform Apply
         id: apply
         if: github.ref == 'refs/heads/main' && needs.tf_plan.outputs.tfplanExitCode == 2

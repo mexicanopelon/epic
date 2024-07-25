@@ -1,41 +1,34 @@
 on:
   push:
-    branches: 
-      - main
+    branches:
+      - 'main'
     paths: 
-      - .github/workflows/epic-mgmt-on-pull-push-main-prod.yml
-      - epic-mgmt/**
-  # pull_request:
-  #   branches:
-  #     - main
-  #   paths: 
-  #     - epic-mgmt/**
-  workflow_dispatch:
+      - citrix-mgmt/**
       
-name: On Pull or Push To Main Branch, Deploy to Epic Mgmt
+name: On Push To Main Branch, Deploy to Citrix Mgmt
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  TF_WORKSPACE: citrix-mgmt
 
 jobs:
   tf_plan:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
-    env:
-      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-      TF_VERSION: ">=0.12"
-      TF_VAR_env: prod
     outputs:
       tfplanSHA: ${{ github.sha }}
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
     
-    # Set working directory to ./mgmt
+    # Set working directory
     defaults:
       run:
         shell: bash
-        working-directory: ./mgmt
+        working-directory: ./${{ env.TF_WORKSPACE }}
         
-    steps:        
+    steps:
         # Checkout the repository to the GitHub Actions runner
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,12 +37,11 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: ${{ env.TF_VERSION }}
           terraform_wrapper: false
 
         # Set TF_WORKSPACE Environment Variable
       - name: Set TF_WORKSPACE Environment Variable
-        run: echo "TF_WORKSPACE=epic-mgmt-${{ env.TF_VAR_env }}" >> $GITHUB_ENV
+        run: echo "TF_WORKSPACE=${{ env.TF_WORKSPACE }}" >> $GITHUB_ENV
 
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
@@ -73,7 +65,7 @@ jobs:
         id: tf-plan
         run: |
           export exitcode=0
-          terraform plan -detailed-exitcode -no-color -var-file ${{ env.TF_VAR_env }}.tfvars -out ${{ github.sha }}.tfplan || export exitcode=$?
+          terraform plan -detailed-exitcode -no-color -var-file ${{ env.TF_WORKSPACE }}.tfvars -out ${{ github.sha }}.tfplan || export exitcode=$?
   
           echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         
@@ -89,10 +81,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.sha }}-tfplan
-          path: mgmt/${{ github.sha }}.tfplan
+          path: ${{ env.TF_WORKSPACE }}/${{ github.sha }}.tfplan
           if-no-files-found: error
 
-        # Create string output of Terraform Plan
+        # Create string output of Terraform  Plan
       - name: Create String Output
         id: tf-plan-string
         run: |
@@ -133,26 +125,19 @@ jobs:
                   body: body
                 })
 
-  tf_apply_prod:
-    name: 'Terraform Apply on Prod Environment'
+  tf_apply:
+    name: 'Terraform Apply'
     runs-on: ubuntu-latest
-    environment: prod
+    environment: citrix-mgmt
     needs: tf_plan
-    env:
-      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-      TF_VERSION: ">=0.12"
-      TF_VAR_env: prod
 
-    # Set working directory to ./mgmt
+    # Set working directory
     defaults:
       run:
         shell: bash
-        working-directory: ./mgmt
+        working-directory: ./${{ env.TF_WORKSPACE }}
 
-    steps:        
+    steps:
         # Checkout the repository to the GitHub Actions runner
       - name: Checkout
         uses: actions/checkout@v4
@@ -161,12 +146,12 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
 
         # Set TF_WORKSPACE Environment Variable
       - name: Set TF_WORKSPACE Environment Variable
-        run: echo "TF_WORKSPACE=epic-mgmt-${{ env.TF_VAR_env }}" >> $GITHUB_ENV
-        
+        run: echo "TF_WORKSPACE=${{ env.TF_WORKSPACE }}" >> $GITHUB_ENV
+
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
         id: init
@@ -185,7 +170,7 @@ jobs:
         with:
           name: ${{ needs.tf_plan.outputs.tfplanSHA }}-tfplan
   
-         # Terraform Apply Prod
+        # Terraform Apply
       - name: Terraform Apply
         id: apply
         if: github.ref == 'refs/heads/main' && needs.tf_plan.outputs.tfplanExitCode == 2
