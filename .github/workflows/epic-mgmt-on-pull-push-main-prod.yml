@@ -1,10 +1,10 @@
 on:
   push:
-    branches: 
-      - main
-    paths: 
-      - .github/workflows/epic-mgmt-on-pull-push-main-prod.yml
-      - epic-mgmt/**
+    # branches: 
+    #   - main
+    # paths: 
+    #   - .github/workflows/epic-mgmt-on-pull-push-main-prod.yml
+    #   - epic-mgmt/**
   # pull_request:
   #   branches:
   #     - main
