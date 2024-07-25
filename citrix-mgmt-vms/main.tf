@@ -5,12 +5,12 @@ data "terraform_remote_state" "citrix-mgmt" {
     storage_account_name="cdelapaztfc21345"
     resource_group_name="cdelapaz-tfc-21345"
     container_name="terraform-state"
-    key = "migration-pocenv:citrix-mgmt"
+    key = "epicenv:citrix-mgmt"
   }
 }
 
 data "azurerm_resource_group" "rg" {
-  name = data.terraform_remote_state.citrix-mgmt.outputs.resource_group_name.value
+  name = data.terraform_remote_state.citrix-mgmt.outputs.resource_group_name
 }
 
 # Create virtual network
