@@ -6,8 +6,7 @@ resource "azurerm_resource_group" "rg" {
     Department = var.department
     Project = var.project
     Owner = var.owner
-    Environment = var.project
+    Environment = var.env
     Release = var.release
   }
 }
-

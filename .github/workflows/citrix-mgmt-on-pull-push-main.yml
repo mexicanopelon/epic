@@ -125,7 +125,7 @@ jobs:
                   body: body
                 })
 
-  tf_apply_dev:
+  tf_apply:
     name: 'Terraform Apply'
     runs-on: ubuntu-latest
     environment: citrix-mgmt

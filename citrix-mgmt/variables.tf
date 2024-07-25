@@ -35,3 +35,7 @@ variable "release" {
   description = "The release name."
 }
 
+variable "env" {
+  type        = string
+  description = "The environment name."
+}

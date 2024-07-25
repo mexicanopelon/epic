@@ -5,7 +5,7 @@ on:
     paths: 
       - epic-mgmt/**
       
-name: On Push To Feature Branches, Deploy to Epic Mgmt
+name: On Push ToF eature Branches, Run a Terraform Plan on Epic Mgmt
 
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
