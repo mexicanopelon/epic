@@ -121,15 +121,15 @@ jobs:
         env:
           SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
         with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            script: |
-              const body = '${process.env.SUMMARY}';
-              github.rest.issues.createComment({
-                  issue_number: context.issue.number,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  body: body
-                })
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const body = '${process.env.SUMMARY}';
+            github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body
+              })
 
   tf_apply:
     name: 'Terraform Apply'
