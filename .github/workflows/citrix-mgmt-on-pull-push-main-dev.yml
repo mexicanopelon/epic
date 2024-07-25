@@ -3,10 +3,10 @@ on:
     branches:
       - '!main'
     paths: 
-      - mgmt/**
+      - citrix/**
   workflow_dispatch:
       
-name: Epic Mgmt On Pull or Push To Main Branch, Deploy to Dev
+name: Epic Citrix On Pull or Push To Main Branch, Deploy to Dev
 
 jobs:
   tf_plan:
@@ -24,11 +24,11 @@ jobs:
       tfplanSHA: ${{ github.sha }}
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
     
-    # Set working directory to ./mgmt
+    # Set working directory to ./citrix
     defaults:
       run:
         shell: bash
-        working-directory: ./mgmt
+        working-directory: ./citrix
         
     steps:
         # Checkout the repository to the GitHub Actions runner
@@ -44,7 +44,7 @@ jobs:
 
         # Set TF_WORKSPACE Environment Variable
       - name: Set TF_WORKSPACE Environment Variable
-        run: echo "TF_WORKSPACE=epic-mgmt-${{ env.TF_VAR_env }}" >> $GITHUB_ENV
+        run: echo "TF_WORKSPACE=epic-citrix-${{ env.TF_VAR_env }}" >> $GITHUB_ENV
 
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
@@ -84,7 +84,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.sha }}-tfplan
-          path: mgmt/${{ github.sha }}.tfplan
+          path: citrix/${{ github.sha }}.tfplan
           if-no-files-found: error
 
         # Create string output of Terraform  Plan
@@ -141,11 +141,11 @@ jobs:
       TF_VERSION: ">=0.12"
       TF_VAR_env: dev
 
-    # Set working directory to ./mgmt
+    # Set working directory to ./citrix
     defaults:
       run:
         shell: bash
-        working-directory: ./mgmt
+        working-directory: ./citrix
 
     steps:
         # Checkout the repository to the GitHub Actions runner
@@ -160,7 +160,7 @@ jobs:
 
         # Set TF_WORKSPACE Environment Variable
       - name: Set TF_WORKSPACE Environment Variable
-        run: echo "TF_WORKSPACE=epic-mgmt-${{ env.TF_VAR_env }}" >> $GITHUB_ENV
+        run: echo "TF_WORKSPACE=epic-citrix-${{ env.TF_VAR_env }}" >> $GITHUB_ENV
 
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init

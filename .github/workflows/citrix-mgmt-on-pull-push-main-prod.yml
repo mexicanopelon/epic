@@ -1,36 +1,40 @@
 on:
   push:
-    branches:
-      - '!main'
+    branches: 
+      - main
     paths: 
-      - mgmt/**
+      - citrix/**
+  pull_request:
+    branches:
+      - main
+    paths: 
+      - citrix/**
   workflow_dispatch:
       
-name: Epic Mgmt On Pull or Push To Main Branch, Deploy to Dev
+name: Epic Citrix On Pull or Push To Main Branch, Deploy to Prod
 
 jobs:
   tf_plan:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
-    environment: dev
     env:
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       TF_VERSION: ">=0.12"
-      TF_VAR_env: dev
+      TF_VAR_env: prod
     outputs:
       tfplanSHA: ${{ github.sha }}
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
     
-    # Set working directory to ./mgmt
+    # Set working directory to ./citrix
     defaults:
       run:
         shell: bash
-        working-directory: ./mgmt
+        working-directory: ./citrix
         
-    steps:
+    steps:        
         # Checkout the repository to the GitHub Actions runner
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,7 +48,7 @@ jobs:
 
         # Set TF_WORKSPACE Environment Variable
       - name: Set TF_WORKSPACE Environment Variable
-        run: echo "TF_WORKSPACE=epic-mgmt-${{ env.TF_VAR_env }}" >> $GITHUB_ENV
+        run: echo "TF_WORKSPACE=epic-citrix-${{ env.TF_VAR_env }}" >> $GITHUB_ENV
 
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
@@ -84,10 +88,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.sha }}-tfplan
-          path: mgmt/${{ github.sha }}.tfplan
+          path: citrix/${{ github.sha }}.tfplan
           if-no-files-found: error
 
-        # Create string output of Terraform  Plan
+        # Create string output of Terraform Plan
       - name: Create String Output
         id: tf-plan-string
         run: |
@@ -128,10 +132,10 @@ jobs:
                   body: body
                 })
 
-  tf_apply_dev:
-    name: 'Terraform Apply on Dev Environment'
+  tf_apply_prod:
+    name: 'Terraform Apply on Prod Environment'
     runs-on: ubuntu-latest
-    environment: dev
+    environment: prod
     needs: tf_plan
     env:
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
@@ -139,15 +143,15 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       TF_VERSION: ">=0.12"
-      TF_VAR_env: dev
+      TF_VAR_env: prod
 
-    # Set working directory to ./mgmt
+    # Set working directory to ./citrix
     defaults:
       run:
         shell: bash
-        working-directory: ./mgmt
+        working-directory: ./citrix
 
-    steps:
+    steps:        
         # Checkout the repository to the GitHub Actions runner
       - name: Checkout
         uses: actions/checkout@v4
@@ -160,8 +164,8 @@ jobs:
 
         # Set TF_WORKSPACE Environment Variable
       - name: Set TF_WORKSPACE Environment Variable
-        run: echo "TF_WORKSPACE=epic-mgmt-${{ env.TF_VAR_env }}" >> $GITHUB_ENV
-
+        run: echo "TF_WORKSPACE=epic-citrix-${{ env.TF_VAR_env }}" >> $GITHUB_ENV
+        
         # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
         id: init
@@ -180,7 +184,7 @@ jobs:
         with:
           name: ${{ needs.tf_plan.outputs.tfplanSHA }}-tfplan
   
-        # Terraform Apply
+         # Terraform Apply Prod
       - name: Terraform Apply
         id: apply
         if: github.ref == 'refs/heads/main' && needs.tf_plan.outputs.tfplanExitCode == 2
