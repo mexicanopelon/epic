@@ -26,7 +26,7 @@ jobs:
       run:
         shell: bash
         working-directory: ./citrix
-        
+
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
@@ -38,9 +38,17 @@ jobs:
       with:
         terraform_wrapper: false
 
+    # Set TF_WORKSPACE Environment Variable
+    - name: Set TF_WORKSPACE Environment Variable
+      run: echo "TF_WORKSPACE=citrix-mgmt-${{ env.TF_VAR_env }}" >> $GITHUB_ENV
+
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform init
+
+    # List the Terraform workspaces to verify the correct one is selected.
+    - name: Terraform List Workspace
+      run: terraform workspace list
 
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
