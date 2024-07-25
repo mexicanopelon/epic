@@ -2,7 +2,12 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 'main'
+      - main
+    paths: 
+      - citrix-mgmt/**
+  pull_request:
+    branches:
+      - main
     paths: 
       - citrix-mgmt/**
       
