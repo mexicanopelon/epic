@@ -1,10 +1,10 @@
 on:
-  push:
-    branches:
-      - '!main'
-    paths: 
-      - .github/workflows/citrix-mgmt-on-pull-push-main-dev.yml
-      - citrix/**
+  # push:
+  #   branches:
+  #     - '!main'
+  #   paths: 
+  #     - .github/workflows/citrix-mgmt-on-pull-push-main-dev.yml
+  #     - citrix/**
   workflow_dispatch:
       
 name: Citrix On Pull or Push To Main Branch, Deploy to Dev

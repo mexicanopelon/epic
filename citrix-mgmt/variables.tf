@@ -30,11 +30,6 @@ variable "owner" {
   description = "Project owner."
 }
 
-variable "env" {
-  type        = string
-  description = "The environment name."
-}
-
 variable "release" {
   type        = string
   description = "The release name."
