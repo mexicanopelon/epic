@@ -3,6 +3,7 @@ on:
     branches: 
       - main
     paths: 
+      - .github/workflows/epic-mgmt-on-pull-push-main-prod.yml
       - mgmt/**
   # pull_request:
   #   branches:
@@ -41,7 +42,7 @@ jobs:
 
         # Install the latest version of the Terraform CLI
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
           terraform_wrapper: false
@@ -158,7 +159,7 @@ jobs:
 
         # Install the latest version of the Terraform CLI
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
 
