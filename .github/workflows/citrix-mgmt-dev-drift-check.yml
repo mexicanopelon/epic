@@ -21,6 +21,12 @@ jobs:
     outputs:
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
 
+          # Set working directory to ./citrix
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./citrix
+        
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
