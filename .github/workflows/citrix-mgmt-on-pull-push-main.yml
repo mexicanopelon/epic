@@ -119,7 +119,7 @@ jobs:
         if: github.ref != 'refs/heads/main'
         uses: actions/github-script@v7
         env:
-          SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
+          SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
         with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
