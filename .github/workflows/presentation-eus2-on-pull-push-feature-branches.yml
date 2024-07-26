@@ -11,7 +11,7 @@ on:
     paths: 
       - presentation-eus2/**
       
-name: On Pull or Push To Feature Branches, Run a Terraform Plan on Presentation East US 2
+name: Presentation East US 2 Feature Branches Terraform Plan On Pull or Push
 
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}

@@ -11,7 +11,7 @@ on:
     paths: 
       - citrix-mgmt-vms/**
       
-name: On Pull or Push To Feature Branches, Run a Terraform Plan on Citrix Mgmt VMs
+name: Citrix Mgmt VMs Feature Branches TF Plan On Pull or Push
 
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
