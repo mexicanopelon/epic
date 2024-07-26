@@ -176,10 +176,11 @@ jobs:
         if: github.ref == 'refs/heads/main'
         with:
           name: ${{ needs.tf_plan.outputs.tfplanSHA }}-tfplan
+          path: ${{ env.TF_DIR }}
   
         # Terraform Apply
       - name: Terraform Apply
         id: apply
         if: github.ref == 'refs/heads/main' && needs.tf_plan.outputs.tfplanExitCode == 2
         run: |
-          terraform apply -auto-approve -input=false ../${{ needs.tf_plan.outputs.tfplanSHA }}.tfplan
+          terraform apply -auto-approve -input=false ${{ needs.tf_plan.outputs.tfplanSHA }}.tfplan
