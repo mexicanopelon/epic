@@ -27,6 +27,7 @@ jobs:
     outputs:
       tfplanSHA: ${{ github.sha }}
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
+      tfPlan2: ${{ steps.tf-plan-string-2.outputs.TERRAFORM_PLAN2_OUT }}
     
     # Set working directory
     defaults:
@@ -111,8 +112,8 @@ jobs:
       - name: Create String Output 2
         id: tf-plan-string-2
         run: |
-          TERRAFORM_PLAN=$(terraform show -no-color ${{ github.sha }}.tfplan)
-          echo "$TERRAFORM_PLAN" >> $GITHUB_OUTPUT
+          TERRAFORM_PLAN2=$(terraform show -no-color ${{ github.sha }}.tfplan)
+          echo "TERRAFORM_PLAN2_OUT=$TERRAFORM_PLAN2" >> $GITHUB_OUTPUT
 
         # Publish Terraform Plan as task summary
       - name: Publish Terraform Plan to Task Summary
@@ -120,17 +121,13 @@ jobs:
           SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
         run: |
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
-      
-      - name: Print GITHUB_TOKEN
-        run: |
-          echo "GITHUB TOKEN: ${{ secrets.GITHUB_TOKEN }}"
 
         # If this is a PR post the changes
       - name: Push Terraform Output to PR
         if: github.ref != 'refs/heads/main'
         uses: actions/github-script@v7
         env:
-          SUMMARY2: ${{ steps.tf-plan-string-2.outputs.summary }}
+          SUMMARY2: ${{ steps.tf-plan-string-2.outputs.TERRAFORM_PLAN2_OUT }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
