@@ -5,6 +5,11 @@ on:
       - '!main'
     paths: 
       - citrix-mgmt-vms/**
+  pull_request:
+    branches:
+      - '!main'
+    paths: 
+      - citrix-mgmt-vms/**
       
 name: On Push To Feature Branches, Run a Terraform Plan on Citrix Mgmt VMs
 
@@ -111,7 +116,7 @@ jobs:
       
         # If this is a PR post the changes
       - name: Push Terraform Output to PR
-        if: github.ref != 'refs/heads/main'
+        if: github.ref != 'refs/heads/main' && github.event_name != 'workflow_dispatch'
         uses: actions/github-script@v7
         env:
           SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
@@ -126,54 +131,3 @@ jobs:
                   body: body
                 })
 
-  tf_apply:
-    name: 'Terraform Apply'
-    runs-on: ubuntu-latest
-    environment: citrix-mgmt-vms
-    needs: tf_plan
-
-    # Set working directory
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./${{ env.TF_WORKSPACE }}
-
-    steps:
-        # Checkout the repository to the GitHub Actions runner
-      - name: Checkout
-        uses: actions/checkout@v4
-
-        # Install the latest version of the Terraform CLI
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_wrapper: false
-
-        # Set TF_WORKSPACE Environment Variable
-      - name: Set TF_WORKSPACE Environment Variable
-        run: echo "TF_WORKSPACE=${{ env.TF_WORKSPACE }}" >> $GITHUB_ENV
-
-        # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-      - name: Terraform Init
-        id: init
-        run: terraform init
-
-        # List the Terraform workspaces to verify the correct one is selected.
-      - name: Terraform List Workspace
-        id: workspace-list
-        run: terraform workspace list
-          
-        # Download saved plan from artifacts
-      - name: Download Terraform Plan Artifact
-        id: download
-        uses: actions/download-artifact@v4
-        if: github.ref == 'refs/heads/main'
-        with:
-          name: ${{ needs.tf_plan.outputs.tfplanSHA }}-tfplan
-  
-        # Terraform Apply
-      - name: Terraform Apply
-        id: apply
-        if: github.ref == 'refs/heads/main' && needs.tf_plan.outputs.tfplanExitCode == 2
-        run: |
-          terraform apply -auto-approve -input=false ../${{ needs.tf_plan.outputs.tfplanSHA }}.tfplan

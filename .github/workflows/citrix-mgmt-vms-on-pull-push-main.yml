@@ -2,7 +2,12 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 'main'
+      - main
+    paths: 
+      - citrix-mgmt-vms/**
+  pull_request:
+    branches:
+      - main
     paths: 
       - citrix-mgmt-vms/**
       
@@ -111,7 +116,7 @@ jobs:
       
         # If this is a PR post the changes
       - name: Push Terraform Output to PR
-        if: github.ref != 'refs/heads/main'
+        if: github.ref != 'refs/heads/main' && github.event_name != 'workflow_dispatch'
         uses: actions/github-script@v7
         env:
           SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
