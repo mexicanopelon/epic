@@ -190,4 +190,4 @@ jobs:
         id: apply
         if: github.ref == 'refs/heads/main' && needs.tf_plan.outputs.tfplanExitCode == 2
         run: |
-          terraform apply -auto-approve -input=false ${{ env.TF_DIR }}/${{ needs.tf_plan.outputs.tfplanSHA }}.tfplan
+          terraform apply -auto-approve -input=false ${{ needs.tf_plan.outputs.tfplanSHA }}.tfplan
