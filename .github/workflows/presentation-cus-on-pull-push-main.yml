@@ -11,7 +11,7 @@ on:
     paths: 
       - presentation-cus/**
       
-name: On Pull or Push To Main Branch, Deploy to Presentation Central US
+name: Presentation Central US Main Branch TF Apply On Pull or Push
 
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
