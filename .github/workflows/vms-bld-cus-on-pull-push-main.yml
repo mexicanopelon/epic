@@ -177,11 +177,6 @@ jobs:
         with:
           name: ${{ needs.tf_plan.outputs.tfplanSHA }}-tfplan
           path: ${{ env.TF_DIR }}
-
-      - name: List Apply Dirs
-        run: |
-          pwd
-          ls
   
         # Terraform Apply
       - name: Terraform Apply
