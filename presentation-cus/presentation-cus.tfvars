@@ -1,5 +1,5 @@
 # Input variables
-resource_group_location = "eastus"
+resource_group_location = "centralus"
 resource_group_name = "cdelapaz-presentation-cus"
 department = "CHN DevOps"
 project = "Presentation Central US"
