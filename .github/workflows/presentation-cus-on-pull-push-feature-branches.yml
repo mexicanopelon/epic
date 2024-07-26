@@ -2,23 +2,23 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
+      - '!main'
     paths: 
-      - citrix-mgmt-vms/**
+      - presentation-cus/**
   pull_request:
     branches:
-      - main
+      - '!main'
     paths: 
-      - citrix-mgmt-vms/**
+      - presentation-cus/**
       
-name: On Pull or Push To Main Branch, Deploy VMs to Citrix Mgmt
+name: On Pull or Push To Feature Branches, Run a Terraform Plan on Presentation Central US
 
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-  TF_WORKSPACE: citrix-mgmt-vms
+  TF_WORKSPACE: presentation-cus
 
 jobs:
   tf_plan:
@@ -130,55 +130,3 @@ jobs:
                   repo: context.repo.repo,
                   body: body
                 })
-
-  tf_apply:
-    name: 'Terraform Apply'
-    runs-on: ubuntu-latest
-    environment: citrix-mgmt-vms
-    needs: tf_plan
-
-    # Set working directory
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./${{ env.TF_WORKSPACE }}
-
-    steps:
-        # Checkout the repository to the GitHub Actions runner
-      - name: Checkout
-        uses: actions/checkout@v4
-
-        # Install the latest version of the Terraform CLI
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_wrapper: false
-
-        # Set TF_WORKSPACE Environment Variable
-      - name: Set TF_WORKSPACE Environment Variable
-        run: echo "TF_WORKSPACE=${{ env.TF_WORKSPACE }}" >> $GITHUB_ENV
-
-        # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-      - name: Terraform Init
-        id: init
-        run: terraform init
-
-        # List the Terraform workspaces to verify the correct one is selected.
-      - name: Terraform List Workspace
-        id: workspace-list
-        run: terraform workspace list
-          
-        # Download saved plan from artifacts
-      - name: Download Terraform Plan Artifact
-        id: download
-        uses: actions/download-artifact@v4
-        if: github.ref == 'refs/heads/main'
-        with:
-          name: ${{ needs.tf_plan.outputs.tfplanSHA }}-tfplan
-  
-        # Terraform Apply
-      - name: Terraform Apply
-        id: apply
-        if: github.ref == 'refs/heads/main' && needs.tf_plan.outputs.tfplanExitCode == 2
-        run: |
-          terraform apply -auto-approve -input=false ../${{ needs.tf_plan.outputs.tfplanSHA }}.tfplan

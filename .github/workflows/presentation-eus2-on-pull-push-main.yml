@@ -4,21 +4,21 @@ on:
     branches:
       - main
     paths: 
-      - citrix-mgmt-vms/**
+      - presentation-eus2/**
   pull_request:
     branches:
       - main
     paths: 
-      - citrix-mgmt-vms/**
+      - presentation-eus2/**
       
-name: On Pull or Push To Main Branch, Deploy VMs to Citrix Mgmt
+name: On Pull or Push To Main Branch, Deploy to Presentation East US
 
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-  TF_WORKSPACE: citrix-mgmt-vms
+  TF_WORKSPACE: presentation-eus2
 
 jobs:
   tf_plan:
@@ -113,28 +113,28 @@ jobs:
           SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
         run: |
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
-      
+
         # If this is a PR post the changes
       - name: Push Terraform Output to PR
         if: github.ref != 'refs/heads/main' && github.event_name != 'workflow_dispatch'
         uses: actions/github-script@v7
         env:
-          SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
+          SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
         with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            script: |
-              const body = `${process.env.SUMMARY}`;
-              github.rest.issues.createComment({
-                  issue_number: context.issue.number,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  body: body
-                })
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const body = `${process.env.SUMMARY}`;
+            github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body
+              })
 
   tf_apply:
     name: 'Terraform Apply'
     runs-on: ubuntu-latest
-    environment: citrix-mgmt-vms
+    environment: presentation-eus2
     needs: tf_plan
 
     # Set working directory

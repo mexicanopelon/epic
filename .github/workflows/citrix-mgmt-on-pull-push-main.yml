@@ -11,7 +11,7 @@ on:
     paths: 
       - citrix-mgmt/**
       
-name: On Push To Main Branch, Deploy to Citrix Mgmt
+name: On Pull or Push To Main Branch, Deploy to Citrix Mgmt
 
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}

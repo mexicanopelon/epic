@@ -6,7 +6,6 @@ variable "resource_group_location" {
 
 variable "resource_group_name" {
   type        = string
-  default     = "cdelapaz-poc"
   description = "Resource group name."
 }
 
@@ -31,14 +30,12 @@ variable "owner" {
   description = "Project owner."
 }
 
-variable "env" {
-  type        = string
-  description = "The environment name."
-  default = "dev"
-}
-
 variable "release" {
   type        = string
   description = "The release name."
 }
 
+variable "env" {
+  type        = string
+  description = "The environment name."
+}
