@@ -88,7 +88,8 @@ jobs:
           pwd
           ls
           pwd
-          ls ${{ env.TF_DIR }}
+          echo ${{ env.GITHUB_WORKSPACE }}
+          echo "$GITHUB_WORKSPACE"
 
         # Save plan to artifacts 
       - name: Publish Terraform Plan Artifact
