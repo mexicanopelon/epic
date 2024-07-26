@@ -176,7 +176,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         with:
           name: ${{ needs.tf_plan.outputs.tfplanSHA }}-tfplan
-          path: ${{ env.TF_DIR }}/${{ env.TF_DIR }}
+          path: ${{ env.TF_DIR }}
 
       - name: List Apply Dirs
         run: |
