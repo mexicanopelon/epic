@@ -182,8 +182,6 @@ jobs:
         run: |
           pwd
           ls
-          pwd
-          ls ${{ env.TF_DIR }}
   
         # Terraform Apply
       - name: Terraform Apply
