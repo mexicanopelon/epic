@@ -123,12 +123,15 @@ jobs:
 
             const match_found = new Boolean(false)
             const index = 0
-            for (const issue of issues) {
-              if ( issue.title == title ) {
-                match_found = true
-                break
-              } else {
-                index++
+
+            if ( issues.data.length > 0 ) {
+              for (const issue of issues) {
+                if ( issue.title == title ) {
+                  match_found = true
+                  break
+                } else {
+                  index++
+                }
               }
             }
               
@@ -178,12 +181,15 @@ jobs:
 
             const match_found = new Boolean(false)
             const index = 0
-            for (const issue of issues) {
-              if ( issue.title == title ) {
-                match_found = true
-                break
-              } else {
-                index++
+
+            if ( issues.data.length > 0 ) {
+              for (const issue of issues) {
+                if ( issue.title == title ) {
+                  match_found = true
+                  break
+                } else {
+                  index++
+                }
               }
             }
               
