@@ -19,6 +19,7 @@ env:
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   TF_WORKSPACE: vms-bld-eus2
+  TF_DIR: vms/bld/eus2
 
 jobs:
   tf_plan:
@@ -32,7 +33,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./${{ env.TF_WORKSPACE }}
+        working-directory: ${{ env.TF_DIR }}
         
     steps:
         # Checkout the repository to the GitHub Actions runner
