@@ -21,11 +21,11 @@ jobs:
     outputs:
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
 
-          # Set working directory to ./citrix
+    # Set working directory
     defaults:
       run:
         shell: bash
-        working-directory: ./citrix
+        working-directory: ${{ env.TF_DIR }}
 
     steps:
     # Checkout the repository to the GitHub Actions runner
@@ -72,7 +72,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ github.sha }}-tfplan
-        path: citrix/${{ github.sha }}.tfplan
+        path: ${{ env.TF_DIR }}/${{ github.sha }}.tfplan
         if-no-files-found: error
         
     # Create string output of Terraform Plan
