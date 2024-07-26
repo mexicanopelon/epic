@@ -120,11 +120,21 @@ jobs:
               creator: creator,
               title: title
             })
+
+            const match_found = new Boolean(false)
+            const index = 0
+            for (const issue of issues) {
+              if ( issue.title == title ) {
+                match_found = true
+                break
+              } else {
+                index++
+              }
+            }
               
-            if( issues.data.length > 0 ) {
-              // We assume there shouldn't be more than 1 open issue, since we update any issue we find
-              const issue = issues.data[0]
-              
+            if (match_found == true) {
+              const issue = issues.data[index]
+
               if ( issue.body == body ) {
                 console.log('Drift Detected: Found matching issue with duplicate content')
               } else {
@@ -144,7 +154,7 @@ jobs:
                 repo: context.repo.repo,
                 title: title,
                 body: body
-             })
+              })
             }
             
     # If changes aren't detected, close any open drift issues
@@ -165,18 +175,29 @@ jobs:
               creator: creator,
               title: title
             })
+
+            const match_found = new Boolean(false)
+            const index = 0
+            for (const issue of issues) {
+              if ( issue.title == title ) {
+                match_found = true
+                break
+              } else {
+                index++
+              }
+            }
               
-            if( issues.data.length > 0 ) {
-              const issue = issues.data[0]
-              
+            if (match_found == true) {
+              const issue = issues.data[index]
+                
               github.rest.issues.update({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: issue.number,
                 state: 'closed'
               })
-            } 
-             
+            }
+
     # Mark the workflow as failed if drift detected 
     - name: Error on Failure
       if: steps.tf-plan.outputs.exitcode == 2
