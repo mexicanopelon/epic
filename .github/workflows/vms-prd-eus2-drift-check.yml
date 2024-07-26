@@ -109,7 +109,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const body = `${process.env.SUMMARY}`;
-            const title = 'Terraform Configuration Drift Detected';
+            const title = 'VMs PRD East US 2 Drift Detected';
             const creator = 'github-actions[bot]'
           
             // Look to see if there is an existing drift issue
@@ -154,7 +154,7 @@ jobs:
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const title = 'Terraform Configuration Drift Detected';
+            const title = 'VMs PRD East US 2 Drift Detected';
             const creator = 'github-actions[bot]'
           
             // Look to see if there is an existing drift issue
