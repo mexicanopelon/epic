@@ -121,19 +121,19 @@ jobs:
               title: title
             })
 
-            const match_found = new Boolean(false)
-            const index = 0
+            # const match_found = new Boolean(false)
+            # const index = 0
 
-            if ( issues.data.length > 0 ) {
-              for (const issue of issues) {
-                if ( issue.title == title ) {
-                  match_found = true
-                  break
-                } else {
-                  index++
-                }
-              }
-            }
+            # if ( issues.data.length > 0 ) {
+            #   for (const issue of issues) {
+            #     if ( issue.title == title ) {
+            #       match_found = true
+            #       break
+            #     } else {
+            #       index++
+            #     }
+            #   }
+            # }
               
             # if (match_found == true) {
             #   const issue = issues.data[index]
@@ -179,19 +179,19 @@ jobs:
               title: title
             })
 
-            const match_found = new Boolean(false)
-            const index = 0
+            # const match_found = new Boolean(false)
+            # const index = 0
 
-            if ( issues.data.length > 0 ) {
-              for (const issue of issues) {
-                if ( issue.title == title ) {
-                  match_found = true
-                  break
-                } else {
-                  index++
-                }
-              }
-            }
+            # if ( issues.data.length > 0 ) {
+            #   for (const issue of issues) {
+            #     if ( issue.title == title ) {
+            #       match_found = true
+            #       break
+            #     } else {
+            #       index++
+            #     }
+            #   }
+            # }
 
             # if (match_found == true) {
             #   const issue = issues.data[index]
