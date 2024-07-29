@@ -13,6 +13,7 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   TF_WORKSPACE: presentation-eus2
   TF_DIR: presentation-eus2
+  TF_PROJECT_TITLE: "Presentation East US 2"
 
 jobs:
   terraform-plan:
@@ -109,7 +110,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const body = `${process.env.SUMMARY}`;
-            const title = 'Citrix Mgmt Drift Detected';
+            const title = '${{ env.TF_PROJECT_TITLE }} Drift Detected';
             const creator = 'github-actions[bot]'
           
             // Look to see if there is an existing drift issue
@@ -169,7 +170,7 @@ jobs:
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const title = 'Citrix Mgmt Drift Detected';
+            const title = '${{ env.TF_PROJECT_TITLE }} Drift Detected';
             const creator = 'github-actions[bot]'
           
             // Look to see if there is an existing drift issue
