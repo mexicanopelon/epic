@@ -125,11 +125,13 @@ jobs:
             var match_found = new Boolean(false)
             var index = 0
 
+            console.log('Index 1 is' + index)
+
             if ( issues.data.length > 0 ) {
               while ( index < issues.data.length ) {
                 var issue = issues.data[index];
                 
-                if ( issue.title == title ) {
+                if ( issue.title == title && issue_match.body == body) {
                   match_found = true
                   break
                 } else {
@@ -138,6 +140,8 @@ jobs:
               }
             }
               
+            console.log('Index 2 is' + index)
+
             if (match_found == true) {
               var issue_match = issues.data[index]
 

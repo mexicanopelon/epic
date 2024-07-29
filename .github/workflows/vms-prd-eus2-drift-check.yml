@@ -129,7 +129,7 @@ jobs:
               while ( index < issues.data.length ) {
                 var issue = issues.data[index];
                 
-                if ( issue.title == title ) {
+                if ( issue.title == title) {
                   match_found = true
                   break
                 } else {
