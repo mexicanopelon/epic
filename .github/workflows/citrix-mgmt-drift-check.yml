@@ -121,12 +121,12 @@ jobs:
               title: title
             })
 
-            let match_found = new Boolean(false)
-            let index = 0
+            var match_found = new Boolean(false)
+            var index = 0
 
             if ( issues.data.length > 0 ) {
               while ( index < issues.data.length ) {
-                let issue = issues.data[index];
+                var issue = issues.data[index];
                 
                 if ( issue.title == title ) {
                   match_found = true
