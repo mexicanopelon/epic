@@ -138,16 +138,16 @@ jobs:
             }
               
             if (match_found == true) {
-              const issue = issues.data[index]
+              const issue_match = issues.data[index]
 
-              if ( issue.body == body ) {
+              if ( issue_match.body == body ) {
                 console.log('Drift Detected: Found matching issue with duplicate content')
               } else {
                 console.log('Drift Detected: Found matching issue, updating body')
                 github.rest.issues.update({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  issue_number: issue.number,
+                  issue_number: issue_match.number,
                   body: body
                 })
               }
