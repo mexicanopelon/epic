@@ -11,6 +11,11 @@ resource "azurerm_resource_group" "rg" {
   }
 
   lifecycle {
-    ignore_changes = [tags] 
+    ignore_changes = [
+      tags["CreatedBy"],
+      tags["CreatedOn"],
+      tags["Exempted"],
+      tags["ExpiryDate"]
+    ] 
   }
 }
