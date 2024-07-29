@@ -109,7 +109,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const body = `${process.env.SUMMARY}`;
-            const title = 'VMs BLD Cental US Drift Detected';
+            const title = 'Citrix Mgmt Drift Detected';
             const creator = 'github-actions[bot]'
           
             // Look to see if there is an existing drift issue
@@ -120,19 +120,34 @@ jobs:
               creator: creator,
               title: title
             })
+
+            var match_found = new Boolean(false)
+            var index = 0
+
+            if ( issues.data.length > 0 ) {
+              while ( index < issues.data.length ) {
+                var issue = issues.data[index];
+                
+                if ( issue.title == title ) {
+                  match_found = true
+                  break
+                } else {
+                  index++
+                }
+              }
+            }
               
-            if( issues.data.length > 0 ) {
-              // We assume there shouldn't be more than 1 open issue, since we update any issue we find
-              const issue = issues.data[0]
-              
-              if ( issue.body == body ) {
+            if (match_found == true) {
+              var issue_match = issues.data[index]
+
+              if ( issue_match.body == body ) {
                 console.log('Drift Detected: Found matching issue with duplicate content')
               } else {
                 console.log('Drift Detected: Found matching issue, updating body')
                 github.rest.issues.update({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  issue_number: issue.number,
+                  issue_number: issue_match.number,
                   body: body
                 })
               }
@@ -144,7 +159,7 @@ jobs:
                 repo: context.repo.repo,
                 title: title,
                 body: body
-             })
+              })
             }
             
     # If changes aren't detected, close any open drift issues
@@ -154,7 +169,7 @@ jobs:
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const title = 'VMs BLD Cental US Drift Detected';
+            const title = 'Citrix Mgmt Drift Detected';
             const creator = 'github-actions[bot]'
           
             // Look to see if there is an existing drift issue
@@ -165,18 +180,34 @@ jobs:
               creator: creator,
               title: title
             })
-              
-            if( issues.data.length > 0 ) {
-              const issue = issues.data[0]
-              
+
+            var match_found = new Boolean(false)
+            var index = 0
+
+            if ( issues.data.length > 0 ) {
+              while ( index < issues.data.length ) {
+                var issue = issues.data[index];
+                
+                if ( issue.title == title ) {
+                  match_found = true
+                  break
+                } else {
+                  index++
+                }
+              }
+            }
+
+            if (match_found == true) {
+              var issue_match = issues.data[index]
+                
               github.rest.issues.update({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: issue.number,
+                issue_number: issue_match.number,
                 state: 'closed'
               })
-            } 
-             
+            }
+
     # Mark the workflow as failed if drift detected 
     - name: Error on Failure
       if: steps.tf-plan.outputs.exitcode == 2
