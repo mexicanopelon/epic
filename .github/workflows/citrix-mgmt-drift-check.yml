@@ -110,7 +110,7 @@ jobs:
           script: |
             const body = `${process.env.SUMMARY}`;
             const title = 'Citrix Mgmt Drift Detected';
-            const creator = 'github-actions[bot]';
+            const creator = 'github-actions[bot]'
           
             // Look to see if there is an existing drift issue
             const issues = await github.rest.issues.listForRepo({
@@ -121,29 +121,29 @@ jobs:
               title: title
             })
 
-            const match_found = new Boolean(false);
-            const index = 0;
+            const match_found = new Boolean(false)
+            const index = 0
 
             if ( issues.data.length > 0 ) {
-              for ( index < issues.data.length ) {
+              while ( index < issues.data.length ) {
                 const issue = issues.data[index];
                 
                 if ( issue.title == title ) {
-                  match_found = true;
-                  break;
+                  match_found = true
+                  break
                 } else {
-                  index++;
+                  index++
                 }
               }
             }
               
             if (match_found == true) {
-              const issue = issues.data[index];
+              const issue = issues.data[index]
 
               if ( issue.body == body ) {
-                console.log('Drift Detected: Found matching issue with duplicate content');
+                console.log('Drift Detected: Found matching issue with duplicate content')
               } else {
-                console.log('Drift Detected: Found matching issue, updating body');
+                console.log('Drift Detected: Found matching issue, updating body')
                 github.rest.issues.update({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
@@ -152,7 +152,7 @@ jobs:
                 })
               }
             } else {
-              console.log('Drift Detected: Creating new issue');
+              console.log('Drift Detected: Creating new issue')
 
               github.rest.issues.create({
                 owner: context.repo.owner,
