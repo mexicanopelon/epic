@@ -1,0 +1,22 @@
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '!main'
+    paths: 
+      - citrix-mgmt/**
+  pull_request:
+    branches:
+      - '!main'
+    paths: 
+      - citrix-mgmt/**
+      
+name: Reusable Citrix Mgmt Feature Branches TF Plan On Pull or Push
+
+jobs:
+  call-reusable-tf-plan:
+    uses: ./.github/workflows/reusable-tf-plan.yml
+    with:
+        TF_WORKSPACE: citrix-mgmt
+        TF_DIR: citrix-mgmt
+    secrets: inherit
