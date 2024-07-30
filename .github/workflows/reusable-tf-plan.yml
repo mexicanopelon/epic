@@ -9,6 +9,13 @@ on:
       TF_DIR:
         required: true
         type: string
+    outputs:
+      TF_PLAN_SHA:
+        description: "Terraform Plan SHA"
+        value: ${{ jobs.tf_plan.outputs.tfplanSHA }}
+      TF_PLAN_EXIT_CODE:
+        description: "Terraform Plan Exit Code"
+        value: ${{ jobs.tf_plan.outputs.tfplanExitCode }}
 
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
