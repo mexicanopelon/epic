@@ -9,7 +9,7 @@ jobs:
   call-reusable-drift-check:
     uses: ./.github/workflows/reusable-drift-check.yml
     with:
-        TF_WORKSPACE: vms-bld-cus
-        TF_DIR: vms/bld/cus
+        TF_WORKSPACE: vms-bld-eus2
+        TF_DIR: vms/bld/eus2
         TF_PROJECT_TITLE: "VMs BLD East US 2"
     secrets: inherit
