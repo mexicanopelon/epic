@@ -1,4 +1,4 @@
-name: Reusable Mgmt Drift Detection
+name: Reusable COPY Drift Detection
 
 on:
   workflow_call:
