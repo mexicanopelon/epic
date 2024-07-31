@@ -6,11 +6,6 @@ on:
       - main
     paths: 
       - citrix-mgmt/**
-  pull_request:
-    branches:
-      - main
-    paths: 
-      - citrix-mgmt/**
       
 name: Citrix Mgmt Main Branch TF Apply On Pull or Push
 
