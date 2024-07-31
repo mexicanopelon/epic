@@ -18,7 +18,7 @@ jobs:
     uses: ./.github/workflows/reusable-tf-plan.yml
     with:
         TF_WORKSPACE: vms-prd-eus2
-        TF_DIR: vms-prd-eus2
+        TF_DIR: vms/prd/eus2
     secrets: inherit
 
   call-reusable-tf-apply:
@@ -26,7 +26,7 @@ jobs:
     needs: call-reusable-tf-plan
     with:
         TF_WORKSPACE: vms-prd-eus2
-        TF_DIR: vms-prd-eus2
+        TF_DIR: vms/prd/eus2
         TF_PLAN_SHA: ${{ needs.call-reusable-tf-plan.outputs.TF_PLAN_SHA }}
         TF_PLAN_EXIT_CODE: ${{ needs.call-reusable-tf-plan.outputs.TF_PLAN_EXIT_CODE }}
     secrets: inherit

@@ -31,7 +31,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./${{ inputs.TF_WORKSPACE }}
+        working-directory: ./${{ inputs.TF_DIR }}
 
     steps:
         # Checkout the repository to the GitHub Actions runner
