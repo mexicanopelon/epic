@@ -45,7 +45,7 @@ jobs:
       # Publish Terraform Plan as task summary
       - name: Publish Terraform Plan to Task Summary
         env:
-          SUMMARY: ${{ needs.call-reusable-tf-plan.outputs.TF_PLAN_OUTPUT }}
+          SUMMARY: "${{ needs.call-reusable-tf-plan.outputs.TF_PLAN_SUMMARY }}"
         run: |
           echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
 
@@ -54,7 +54,7 @@ jobs:
         if: ${{ needs.call-reusable-tf-plan.outputs.TF_PLAN_EXIT_CODE }} == 2
         uses: actions/github-script@v7
         env:
-          SUMMARY: "${{ needs.call-reusable-tf-plan.outputs.TF_PLAN_OUTPUT }}"
+          SUMMARY: "${{ needs.call-reusable-tf-plan.outputs.TF_PLAN_SUMMARY }}"
         with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
@@ -114,7 +114,7 @@ jobs:
               
       # If changes aren't detected, close any open drift issues
       - name: No Changes Detected, Close Any Open Drift Issues
-        if: ${{ needs.call-reusable-tf-plan.outputs.TF_PLAN_OUTPUT }} == 0
+        if: ${{ needs.call-reusable-tf-plan.outputs.TF_PLAN_EXIT_CODE }} == 0
         uses: actions/github-script@v7
         with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -160,5 +160,5 @@ jobs:
 
       # Mark the workflow as failed if drift detected 
       - name: Error on Failure
-        if: ${{ needs.call-reusable-tf-plan.outputs.TF_PLAN_OUTPUT }} == 2
+        if: ${{ needs.call-reusable-tf-plan.outputs.TF_PLAN_EXIT_CODE }} == 2
         run: exit 1
