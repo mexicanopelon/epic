@@ -7,4 +7,3 @@ owner = "Citrix Mgmt Team"
 username = "cdelapaz"
 release = "1.0.0"
 env = "citrix-mgmt"
-
