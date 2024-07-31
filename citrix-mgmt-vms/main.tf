@@ -28,12 +28,12 @@ resource "azurerm_virtual_network" "my_terraform_network" {
     Release = var.release
   }
 
-  lifecycle {
-    ignore_changes = [
-      tags["CreatedBy"],
-      tags["CreatedOn"],
-      tags["Exempted"],
-      tags["ExpiryDate"]
-    ] 
-  }
+  # lifecycle {
+  #   ignore_changes = [
+  #     tags["CreatedBy"],
+  #     tags["CreatedOn"],
+  #     tags["Exempted"],
+  #     tags["ExpiryDate"]
+  #   ] 
+  # }
 }

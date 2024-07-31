@@ -10,12 +10,12 @@ resource "azurerm_resource_group" "rg" {
     Release = var.release
   }
     
-  lifecycle {
-    ignore_changes = [
-      tags["CreatedBy"],
-      tags["CreatedOn"],
-      tags["Exempted"],
-      tags["ExpiryDate"]
-    ] 
-  }
+  # lifecycle {
+  #   ignore_changes = [
+  #     tags["CreatedBy"],
+  #     tags["CreatedOn"],
+  #     tags["Exempted"],
+  #     tags["ExpiryDate"]
+  #   ] 
+  # }
 }
