@@ -9,7 +9,7 @@ jobs:
   call-reusable-drift-check:
     uses: ./.github/workflows/reusable-drift-check.yml
     with:
-        TF_WORKSPACE: vms-prd-cus
-        TF_DIR: vms/prd/cus
+        TF_WORKSPACE: vms-prd-eus2
+        TF_DIR: vms/prd/eus2
         TF_PROJECT_TITLE: "VMs PRD East US 2"
     secrets: inherit
