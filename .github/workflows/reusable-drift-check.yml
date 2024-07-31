@@ -1,4 +1,4 @@
-name: Reusable Mgmt Drift Detection
+name: Reusable Drift Detection
 
 on:
   workflow_call:
@@ -22,7 +22,7 @@ env:
   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-  
+
 jobs:
   call-reusable-tf-plan:
     uses: ./.github/workflows/reusable-tf-plan.yml
@@ -40,7 +40,6 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ${{ inputs.TF_DIR }}
 
     steps:
       # Publish Terraform Plan as task summary
