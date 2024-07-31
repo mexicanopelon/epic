@@ -16,9 +16,9 @@ on:
       TF_PLAN_EXIT_CODE:
         description: "Terraform Plan Exit Code"
         value: ${{ jobs.tf_plan.outputs.tfplanExitCode }}
-      TF_PLAN_OUTPUT:
-        description: "Terraform Plan Output"
-        value: ${{ jobs.tf_plan.outputs.tfplanOutput }}
+      TF_PLAN_SUMMARY:
+        description: "Terraform Plan Summary"
+        value: ${{ jobs.tf_plan.outputs.tfplanSummary }}
 
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
@@ -33,7 +33,7 @@ jobs:
     outputs:
       tfplanSHA: ${{ github.sha }}
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
-      tfplanOutput: ${{ steps.tf-plan-string.outputs.summary }}
+      tfplanSummary: "${{ steps.tf-plan-string.outputs.summary }}"
     
     # Set working directory
     defaults:
