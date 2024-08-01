@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths: 
-      - vms-prd-cus/**
+      - vms/prd/cus/**
 
 name: VMs PRD CUS Main Branch TF Apply On Pull or Push
 

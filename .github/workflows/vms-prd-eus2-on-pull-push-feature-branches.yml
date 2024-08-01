@@ -5,7 +5,7 @@ on:
       - '**'
       - '!main'
     paths: 
-      - vms-prd-eus2/**
+      - vms/prd/eus2/**
       
 name: VMs PRD EUS2 Feature Branches TF Plan On Pull or Push
 

@@ -36,4 +36,5 @@ resource "azurerm_virtual_network" "my_terraform_network" {
       tags["ExpiryDate"]
     ] 
   }
+  
 }

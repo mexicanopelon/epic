@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths: 
-      - vms-bld-cus/**
+      - vms/bld/cus/**
       
 name: VMs BLD CUS Main Branch TF Apply On Pull or Push
 

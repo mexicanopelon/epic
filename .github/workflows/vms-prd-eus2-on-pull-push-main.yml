@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths: 
-      - vms-prd-eus2/**
+      - vms/prd/eus2/**
       
 name: VMs PRD EUS2 Main Branch TF Apply On Pull or Push
 
