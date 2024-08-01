@@ -5,7 +5,7 @@ on:
       - '**'
       - '!main'
     paths: 
-      - vms-bld-cus/**
+      - vms/bld/cus/**
 
 name: VMs BLD CUS Feature Branches TF Plan On Pull or Push
 
