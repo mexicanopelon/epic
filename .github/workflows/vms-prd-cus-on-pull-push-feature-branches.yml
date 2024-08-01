@@ -5,11 +5,6 @@ on:
       - '!main'
     paths: 
       - vms-prd-cus/**
-  pull_request:
-    branches:
-      - '!main'
-    paths: 
-      - vms-prd-cus/**
 
 name: VMs PRD CUS Feature Branches TF Plan On Pull or Push
 

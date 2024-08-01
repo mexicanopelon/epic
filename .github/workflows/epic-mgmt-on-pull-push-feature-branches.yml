@@ -5,11 +5,6 @@ on:
       - '!main'
     paths: 
       - epic-mgmt/**
-  pull_request:
-    branches:
-      - '!main'
-    paths: 
-      - epic-mgmt/**
       
 name: Epic Mgmt Feature Branches Terraform Plan On Pull or Push
 

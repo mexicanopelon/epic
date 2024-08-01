@@ -5,12 +5,7 @@ on:
       - '!main'
     paths: 
       - vms-bld-eus2/**
-  pull_request:
-    branches:
-      - '!main'
-    paths: 
-      - vms-bld-eus2/**
-
+      
 name: VMs BLD EUS2 Feature Branches TF Plan On Pull or Push
 
 jobs:

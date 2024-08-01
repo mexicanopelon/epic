@@ -5,11 +5,6 @@ on:
       - main
     paths: 
       - vms-bld-eus2/**
-  pull_request:
-    branches:
-      - main
-    paths: 
-      - vms-bld-eus2/**
       
 name: VMs BLD EUS2 Main Branch TF Apply On Pull or Push
 

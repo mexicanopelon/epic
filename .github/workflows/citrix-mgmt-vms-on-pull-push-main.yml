@@ -5,11 +5,6 @@ on:
       - main
     paths: 
       - citrix-mgmt-vms/**
-  pull_request:
-    branches:
-      - main
-    paths: 
-      - citrix-mgmt-vms/**
       
 name: Citrix Mgmt VMs Main Branch TF Apply On Pull or Push
 

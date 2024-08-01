@@ -5,11 +5,6 @@ on:
       - '!main'
     paths: 
       - presentation-cus/**
-  pull_request:
-    branches:
-      - '!main'
-    paths: 
-      - presentation-cus/**
       
 name: Presentation Central US Feature Branches Terraform Plan On Pull or Push
 
