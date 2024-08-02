@@ -1,7 +1,7 @@
 on:
   workflow_dispatch: 
-  schedule:
-    - cron: '41 3 * * *' # runs nightly at 3:41 am
+  # schedule:
+  #   - cron: '41 3 * * *' # runs nightly at 3:41 am
 
 name: 'VMs PRD Central US Drift Detection'
 
